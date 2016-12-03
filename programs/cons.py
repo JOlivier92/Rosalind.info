@@ -6,11 +6,14 @@ class ConsensusChecker:
         import numpy as np
         self.sequenceIDList = sequenceIDList
         self.sequenceList = sequenceList
+        #initializes numpy array with 4 rows and columns == length of a sequence.
         self.countArray = np.zeros([4,len(self.sequenceList[0])])
         
     def mainController(self):
+        #Run through each sequence, create counter array
         for i in range(0,len(self.sequenceIDList)):
             self.addtoCounterArray(self.sequenceList[i])
+        #After counter array has been created, print the output.
         self.outputPrinter()
 
     def addtoCounterArray(self,sequence):
@@ -32,6 +35,8 @@ class ConsensusChecker:
         import sys
         import numpy as np
         outputSequence = str()
+        #Look down each column of the counter array
+        #Find max, locate it, and add to outputSequence accordingly. 
         for i in range(0,len(self.countArray[0])):
             column = self.countArray[:,i].tolist()
             columnMax = max(column)
@@ -44,9 +49,12 @@ class ConsensusChecker:
                 outputSequence+="G"
             else:
                 outputSequence+="T"
-        print(outputSequence)
-        poop = self.countArray.tolist()
-        for i in range(0,len(poop)):
+        print(outputSequence)\
+        #Just pushing np Array to list for easier printing...
+        listofArray = self.countArray.tolist()
+        #outer loop > each row
+        #inner loop > each column (each cell within the row)
+        for i in range(0,len(listofArray)):
             if i == 0:
                 print("A: ",end="")
             elif i == 1:
@@ -55,17 +63,9 @@ class ConsensusChecker:
                 print("G: ",end="")
             elif i == 3:
                 print("T: ",end="")
-            for item in poop[i]:
+            for item in listofArray[i]:
                 print(int(item),end=" ")
             print("")
-
-
-        # print("A: "+ str(self.countArray[0]))
-        # print("C: "+ str(self.countArray[1]))
-        # print("G: "+ str(self.countArray[2]))
-        # print("T: "+ str(self.countArray[3]))
-
-
         sys.exit()
 
 
@@ -73,42 +73,23 @@ class ConsensusChecker:
 
 
 class FileReader:
-    """
-    This is the fileReader in the program. Its function is two create two objects:
-    One xseq object which will contain a list with the name of the xsequence as well as
-    the sequence itself. The second object will be a dictionary with all of the ySequence
-    names paired with their sequences.
-    """
     def __init__(self,filetoRead):
-        """
-        The only input object for this class is the fasta file which needs to be read.
-        xSequence will be a list to contain the sequenceID as well as the sequence of
-        the first sequence in the fasta file. The ySequenceList will contain all of the 
-        subsequent sequenceIDs with their sequences.
-        """
         self.filetoRead = filetoRead
         self.sequenceIDList = list()
         self.sequenceList = list()
 
     def reader(self):
-        """
-        This is the function that actually does the parsing of the fasta file. It looks
-        at every line in the file and determines whether it is the start of a new sequence.
-        If it is the first sequence in the file, it adds the sequenceID and the sequence to the
-        xSequence object. Else, it will add the sequenceID and the sequence to the ySequenceList
-        object.
-        This function will return the xSequence object (list) and the ySequenceList object (list)
-        """
         self.currentSequence = str()
         for line in self.filetoRead:
-            #Check to see if it's a titleline
             if line.startswith(">"):
-                if self.currentSequence:
+                #prevents empty sequence being added before first sequenceID is added.
+                if self.sequenceIDList:
                     self.sequenceList.append(self.currentSequence)
                 self.sequenceIDList.append(line.rstrip())
                 self.currentSequence = str()
             else:
                 self.currentSequence+=line.rstrip().upper()
+        #Add last sequence to sequenceList
         self.sequenceList.append(self.currentSequence)
         return self.sequenceIDList,self.sequenceList
 
