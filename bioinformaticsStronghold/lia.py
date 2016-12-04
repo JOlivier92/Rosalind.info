@@ -17,6 +17,8 @@ class IndependentAlleles:
 		for i in range(self.N,self.totalKids+1):
 			#Add probability for certain i.
 			#Probability for i == 1/4^i * 3/4^(total-i) * totalCi
+			#SUM(P(i) for i in range (min with AaBb,max))
+			#The trick is that no matter what your genotype is, the probability of getting an AaBb child is always 1/4
 			self.probability+=0.25**(i)*0.75**(self.totalKids-i)*(math.factorial(self.totalKids)/(math.factorial(i)*math.factorial(self.totalKids-i)))
 		return self.probability
 
