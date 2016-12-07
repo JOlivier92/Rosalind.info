@@ -59,7 +59,7 @@ class FileReader:
 				self.sequenceIDList.append(line.rstrip())
 				currentSequence = str()
 			else:
-				currentSequence+=line.rstrip()
+				currentSequence+=line.rstrip().upper()
 		self.sequenceList.append(currentSequence)
 		return self.sequenceList,self.sequenceIDList
 def main():
