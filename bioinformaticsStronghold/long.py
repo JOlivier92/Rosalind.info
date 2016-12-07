@@ -67,18 +67,17 @@ class Assembler:
 			sinkNode = self.sequenceList[currentEdge[1]]
 			if i == 0:
 				self.halfLength = round(len(sourceNode)/2)
-			if sourceNode[-self.halfLength:] in sinkNode:
-				self.checkBiggerMatch(sourceNode,sinkNode)
-				copyMe = len(sinkNode)
-				sinkNode = sinkNode.replace(sourceNode[-self.halfLength:],"")
-				if i == 0:
-					concatedString+=sourceNode
-				concatedString+=sinkNode
-				self.halfLength = round(copyMe/2)+1
-			else:
-				pass
+			self.checkBiggerMatch(sourceNode,sinkNode)
+			copyMe = len(sinkNode)
+			sinkNode = sinkNode.replace(sourceNode[-self.halfLength:],"")
+			if i == 0:
+				concatedString+=sourceNode
+			concatedString+=sinkNode
+			self.halfLength = round(copyMe/2)+1
+			
 		print(concatedString)
 		sys.exit()
+	
 	def checkBiggerMatch(self,sourceNode,sinkNode):
 		self.halfLength+=1
 		if sourceNode[-self.halfLength:] in sinkNode:
