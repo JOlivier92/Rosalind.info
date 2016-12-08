@@ -16,10 +16,12 @@ def main():
 	#Example of 21 7
 	#For i in range 1,8 (1,2,3,4,5,6,7)
 	#Multiply total by currentN (21,20,19,18,17,16,15)
-	#Print the total modulo 1,000,000
 	for i in range(1,k+1):
 		total*=n
 		n-=1
+		#IMPORTANT: It is neccessary to modulo after every iteration.
+		#The purpose of modulo is to prevent overflow, so doing so at the end defeats the purpose (David Janke)
+		#The result will be the same whether you modulo first or later.
 		total%=1000000
 	print(total)
 
