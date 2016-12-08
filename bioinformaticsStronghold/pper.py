@@ -20,7 +20,7 @@ def main():
 	for i in range(1,k+1):
 		total*=n
 		n-=1
-		total%1000000
+		total%=1000000
 	print(total)
 
 
