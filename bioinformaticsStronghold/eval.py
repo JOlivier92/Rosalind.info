@@ -34,8 +34,10 @@ class EvaluateProbability:
 				currentProbability*=probabilityofGorC
 		#Append substringProbability to the listofSubstringProbabilities
 		self.listofSubstringProbabilities.append(currentProbability)
+	
 	def calculateActualandPrint(self,probability):
-		#The probability == the probability of the subsequence * (total amount of times that sequence can occur given the length)
+		#The probability == the probability of the subsequence * 
+		#(total amount of times that sequence can occur given the length)
 		probability*=(self.n-len(self.sequence)+1)
 		#Print tab-separated answers
 		print(probability,end="\t")
