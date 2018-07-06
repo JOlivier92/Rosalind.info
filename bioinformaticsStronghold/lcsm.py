@@ -11,54 +11,41 @@ class FindSharedMotif:
 		self.optimizedCheckStrings = []
 
 	def classController(self):
-		print("hi",len(self.sequences))
 		self.optimizeSearch()
-		for i in range(2,len(self.sequences)):
+		for i in range(1,len(self.sequences)):
 			self.findMatchedSubStrings(self.sequences[i].upper())
+		
 		return self.optimizedCheckStrings
 
 	def optimizeSearch(self):
 		import sys
-		tempString1Sequences = []
-		tempString2Sequences = []
-		tempString2 = []
-		firstString = self.sequences[0].upper()
-		secondString = self.sequences[1].upper()
-		print(firstString)
-		for i in range(0,len(firstString)-1):
-			print(firstString[i],i)
-			for j in range(i+1,len(firstString)):
-				print(i,j)
-				if firstString[i:j+1] not in tempString1Sequences:
-					if j == len(firstString)-1:
-						self.optimizedCheckStrings.append(firstString[i:])
-					else:
-						self.optimizedCheckStrings.append(firstString[i:j+1])
-		#self.optimizedCheckStrings = tempString1Sequences
-		# for i in range(0,len(secondString)-1):
-		# 	for j in range(i+1,len(secondString)):
-		# 		if secondString[i:j+1] not in tempString2Sequences:
-		# 			if j == len(secondString)-1:
-		# 				tempString2Sequences.append(secondString[i:])
-		# 			else:
-		# 				tempString2Sequences.append(secondString[i:j+1])
+		for i in range(0,len(self.sequences[0].upper())-1):
+			for j in range(i+1,len(self.sequences[0].upper())):
+				self.optimizedCheckStrings.append(self.sequences[0].upper()[i:j+1])
 
-		# self.optimizedCheckStrings = [x for x in tempString1Sequences if x in tempString2Sequences]
-		# self.optimizedCheckStrings.append("A")
-		print(self.optimizedCheckStrings)
+		self.optimizedCheckStrings = list(set(self.optimizedCheckStrings))
 
 	def findMatchedSubStrings(self,currentSequence):
 		import sys
+		removeList = []
+		newList = []
 		for subSequence in self.optimizedCheckStrings:
-			print(subSequence)
 			if subSequence in currentSequence:
-				print("yup",subSequence,currentSequence)
 				pass
 			else:
-				print("nope")
-				self.removeSubstring(subSequence)
-	def removeSubstring(sequence):
+				print("subsequence " + subSequence+" not found in "+ currentSequence," removing " + subSequence)
+				removeList.append(subSequence)
+		print(len(self.optimizedCheckStrings),len(removeList))
+		for item in self.optimizedCheckStrings:
+			if item in removeList:
+				pass
+			else:
+				newList.append(item)
+		self.optimizedCheckStrings = [x for x in newList]
+
+	def removeSubstring(self,sequence):
 		while sequence in self.optimizedCheckStrings:
+			print(sequence)
 			self.optimizedCheckStrings.remove(sequence)
 
 
