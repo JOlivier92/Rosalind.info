@@ -5,73 +5,69 @@
 
 
 class FindSharedMotif:
-	def __init__(self,listofSequences):
-		self.sequences = listofSequences
-		self.subStrings = []
-		self.optimizedCheckStrings = []
-
+	def __init__(self,sequences):
+		self.sequences = sequences
+		self.commonSubStrings = []
+	
 	def classController(self):
-		self.optimizeSearch()
-		for i in range(1,len(self.sequences)):
-			self.findMatchedSubStrings(self.sequences[i].upper())
-		
-		return self.optimizedCheckStrings
+		self.optimizer()
+		self.compare_each_string()
+		longestSequence = self.find_longest_word()
+		return longestSequence
 
-	def optimizeSearch(self):
+	def optimizer(self):
+		"""
+		Attempts to optimize this problem by first looking at all common substrings
+		of the first 2 sequences of the dataset. Then, it sorts the common substrings
+		by descending length (In a truly random world, it is less likely that the longer
+		substrings will be common, therefore if we search by descending length we can more
+		quickly reduce the length of the commonSubString list, improving the search over time!)
+		"""
 		import sys
-		for i in range(0,len(self.sequences[0].upper())-1):
-			for j in range(i+1,len(self.sequences[0].upper())):
-				self.optimizedCheckStrings.append(self.sequences[0].upper()[i:j+1])
 
-		self.optimizedCheckStrings = list(set(self.optimizedCheckStrings))
+		for i in range(0,len(self.sequences[0])-1):
+			for j in range(i+1,len(self.sequences[0])):
+				if self.sequences[0][i:j] in self.sequences[1]:
+					self.commonSubStrings.append(self.sequences[0][i:j])
+		self.commonSubStrings = list(set(self.commonSubStrings))
+		self.commonSubStrings.sort(key=len,reverse=True)
 
-	def findMatchedSubStrings(self,currentSequence):
-		import sys
+	def compare_each_string(self):
 		removeList = []
-		newList = []
-		for subSequence in self.optimizedCheckStrings:
-			if subSequence in currentSequence:
-				pass
-			else:
-				print("subsequence " + subSequence+" not found in "+ currentSequence," removing " + subSequence)
-				removeList.append(subSequence)
-		print(len(self.optimizedCheckStrings),len(removeList))
-		for item in self.optimizedCheckStrings:
-			if item in removeList:
-				pass
-			else:
-				newList.append(item)
-		self.optimizedCheckStrings = [x for x in newList]
-
-	def removeSubstring(self,sequence):
-		while sequence in self.optimizedCheckStrings:
-			print(sequence)
-			self.optimizedCheckStrings.remove(sequence)
-
+		for i in range(2,len(self.sequences)):
+			for j in range(0,len(self.commonSubStrings)):
+				if self.commonSubStrings[j] not in self.sequences[i]:
+					removeList.append(self.commonSubStrings[j])
+			self.commonSubStrings = [x for x in self.commonSubStrings if x not in removeList]
+					
+	def find_longest_word(self):
+		longestSequence = ""
+		for i in range(0,len(self.commonSubStrings)):
+			if len(self.commonSubStrings[i]) > len(longestSequence):
+				longestSequence = self.commonSubStrings[i]
+		return longestSequence
 
 class FileReader:
-	def __init__(self,filename):
-		self.filename = filename
-
+	def __init__(self,file):
+		self.file = file
+	
 	def reader(self):
-		i = 0
+
 		sequences = []
-		for line in self.filename:
-			if i % 2 == 0:
-				pass
+		currentSequence = ""
+		for line in self.file:
+			if line.startswith(">"):
+				if currentSequence:
+					sequences.append(currentSequence)
+					currentSequence = ""
 			else:
-				sequences.append(line.strip())
-			i+=1
+				currentSequence+=line.strip()
 		return sequences
-
-
-
 def main():
 	import sys
 	readInput = FileReader(sys.stdin)
 	listofSequences = readInput.reader()
 	x = FindSharedMotif(listofSequences).classController()
 	print(x)
-
 
 main()
